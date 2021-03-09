@@ -1,13 +1,15 @@
 package taller_1;
 
 import processing.core.PApplet;
+import processing.core.PImage;
 
 public class Disparo {
 
 	private int posX, posY, tamX, tamY, velY;
 	private PApplet app;
+	private PImage disparo;
 
-	public Disparo(int posX, int posY, int tamX, int tamY, int velY, PApplet app) {
+	public Disparo(int posX, int posY, int tamX, int tamY, int velY, PApplet app, PImage disparo) {
 
 		this.posX = posX;
 		this.posY = posY;
@@ -15,9 +17,19 @@ public class Disparo {
 		this.tamY = tamY;
 		this.velY = velY;
 		this.app = app;
+		this.disparo = disparo;
+
+	}
+
+	public void pintarDisparo() {
+		getApp().imageMode(PApplet.CENTER);
+		getApp().image(disparo, getPosX(), getPosY(), getTamX(), getTamY());
+		getApp().imageMode(PApplet.CORNER);
+		
 	}
 
 	public void movDisparo() {
+		posY -= velY;
 
 	}
 

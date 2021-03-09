@@ -4,28 +4,22 @@ import processing.core.PApplet;
 
 public abstract class NaveEnemiga extends NaveEspacial {
 
-	private int velX, velY;
+	private int velY;
 
-	public NaveEnemiga(int posX, int posY, int tam, PApplet app) {
+	public NaveEnemiga(int posX, int posY,int tam,int velY, PApplet app) {
 		super(posX, posY, tam, app);
+		this.velY = velY;
+		
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void movNave() {
 		// TODO Auto-generated method stub
-
+		setPosY(getPosY() + velY);
 	}
 
 	public abstract void pintar();
-
-	public int getVelX() {
-		return velX;
-	}
-
-	public void setVelX(int velX) {
-		this.velX = velX;
-	}
 
 	public int getVelY() {
 		return velY;

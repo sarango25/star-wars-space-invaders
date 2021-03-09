@@ -1,14 +1,21 @@
 package taller_1;
 
+import java.util.ArrayList;
 import processing.core.PApplet;
 import processing.core.PImage;
 
 public class Main extends PApplet {
 
 	PImage inicio1, inicio2, instruccion1, instruccion2, instruccion3, instruccion4, instruccion5, instruccion6,
-			instruccion7, instruccion8, instruccion9, resumen1, resumen2, juego1, fighter, interceptor, xwing, disparo;
+			instruccion7, instruccion8, instruccion9, resumen1, resumen2, juego1, fighterImage, interceptorImage,
+			xwingImage, disparoImage;
 
 	int pantalla;
+	NavePrincipal xwing;
+	Disparo disparo;
+	Fighter fighter;
+	Interceptor interceptor;
+	ArrayList<NaveEnemiga>[] enemigos = new ArrayList[10];
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -36,12 +43,26 @@ public class Main extends PApplet {
 		resumen1 = loadImage("Imagenes/Resumen_1.png");
 		resumen2 = loadImage("Imagenes/Resumen_2.png");
 		juego1 = loadImage("Imagenes/Juego_1.png");
-		fighter = loadImage("Imagenes/Fighter.png");
-		interceptor = loadImage("Imagenes/Interceptor.png");
-		xwing = loadImage("Imagenes/Xwing.png");
-		disparo = loadImage("Imagenes/Disparo.png");
+		fighterImage = loadImage("Imagenes/Fighter.png");
+		interceptorImage = loadImage("Imagenes/Interceptor.png");
+		xwingImage = loadImage("Imagenes/Xwing.png");
+		disparoImage = loadImage("Imagenes/Disparo.png");
 
-		pantalla = 0;
+		pantalla = 9;
+
+		xwing = new NavePrincipal(638, 690, 87, this, 30, false, xwingImage);
+		disparo = new Disparo(638, 690, 7, 29, 4, this, disparoImage);
+		fighter = new Fighter(200, 200, 69, 3, this, 1, fighterImage);
+		interceptor = new Interceptor(300, 300, 69, 3, this, 2, interceptorImage);
+
+		for (int i = 0; i < 10; i++) {
+			enemigos[i] = new ArrayList<NaveEnemiga>();
+		}
+
+		for (int i = 0; i < 10; i++) {
+			enemigos[i].add(new Fighter(150 + (120 * i), 150, 69, 3, this, 1, fighterImage));
+			enemigos[i].add(new Fighter(150 + (120 * i), 150 + (69 + 50), 69, 3, this, 1, fighterImage));
+		}
 
 	}
 
@@ -102,6 +123,23 @@ public class Main extends PApplet {
 
 		case 9:
 			image(juego1, 0, 0);
+			xwing.pintar();
+			disparo.pintarDisparo();
+
+			for (int i = 0; i < 10; i++) {
+				for (int j = 0; j < enemigos[i].size(); j++) {
+					enemigos[i].get(j).pintar();
+				}
+			}
+
+			movEnemigos();
+
+			if (xwing.isDisparando() == true) {
+				disparo.movDisparo();
+			}
+			if (disparo.getPosY() <= 80) {
+				reiniciarDisparo();
+			}
 
 			break;
 
@@ -110,6 +148,7 @@ public class Main extends PApplet {
 			if (1049 < mouseX && mouseX < 1255 && 655 < mouseY && mouseY < 718) {
 				image(resumen2, 0, 0);
 			}
+			break;
 
 		}
 		text("x:" + mouseX + "y:" + mouseY, mouseX, mouseY);
@@ -172,10 +211,61 @@ public class Main extends PApplet {
 		case 8:
 			image(instruccion8, 0, 0);
 			if (533 < mouseX && mouseX < 831 && 674 < mouseY && mouseY < 738) {
-				pantalla = 9 ;
+				pantalla = 9;
 			}
 			break;
-			
+
+		}
+
+	}
+
+	public void keyPressed() {
+
+		switch (pantalla) {
+
+		case 9:
+			if (key == CODED) {
+				if (keyCode == LEFT) {
+					xwing.movIzq();
+					if (xwing.isDisparando() == false) {
+						disparo.setPosX(xwing.getPosX());
+					}
+					// System.out.println("si");
+				}
+				if (keyCode == RIGHT) {
+					xwing.movDer();
+					if (xwing.isDisparando() == false) {
+						disparo.setPosX(xwing.getPosX());
+					}
+				}
+
+			}
+
+			if (key == 32 && xwing.isDisparando() == false) {
+				xwing.disparar();
+			}
+
+			break;
+		}
+
+	}
+
+	public void reiniciarDisparo() {
+		if (xwing.isDisparando() == true) {
+			xwing.setDisparando(false);
+			disparo.setPosX(xwing.getPosX());
+			disparo.setPosY(xwing.getPosY());
 		}
 	}
+
+	public void movEnemigos() {
+		if (millis() % 3000 == 0) {
+			for (int i = 0; i < 10; i++) {
+				for (int j = 0; j < enemigos[i].size(); j++) {
+					enemigos[i].get(j).movNave();
+				}
+			}
+		}
+	}
+
 }

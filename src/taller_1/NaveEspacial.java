@@ -16,8 +16,10 @@ public abstract class NaveEspacial {
 	}
 
 	public abstract void movNave();
+	
 
 	public abstract void pintar();
+		
 
 	public int getPosX() {
 		return posX;

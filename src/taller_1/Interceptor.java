@@ -1,25 +1,30 @@
 package taller_1;
 
 import processing.core.PApplet;
+import processing.core.PImage;
 
 public class Interceptor extends NaveEnemiga {
 
 	private int vida;
-	private PApplet app;
+	private PImage interceptor;
 
-	public Interceptor(int posX, int posY, int tam, PApplet app, int vida) {
-		super(posX, posY, tam, app);
+	public Interceptor(int posX, int posY, int tam,int velY, PApplet app, int vida, PImage interceptor) {
+		super(posX, posY, tam, velY, app);
 		this.vida = vida;
+		this.interceptor = interceptor;
 
 	}
 
 	@Override
 	public void pintar() {
 		// TODO Auto-generated method stub
-
+		getApp().imageMode(PApplet.CENTER);
+		getApp().image(interceptor, getPosX(), getPosY(), getTam(), getTam());
+		getApp().imageMode(PApplet.CORNER);
 	}
+
 	public void movNave() {
-		
+
 	}
 
 	public int getVida() {
@@ -29,14 +34,5 @@ public class Interceptor extends NaveEnemiga {
 	public void setVida(int vida) {
 		this.vida = vida;
 	}
-
-	public PApplet getApp() {
-		return app;
-	}
-
-	public void setApp(PApplet app) {
-		this.app = app;
-	}
-	
 
 }

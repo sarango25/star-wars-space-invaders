@@ -56,7 +56,7 @@ public class Main extends PApplet {
 		xwingImage = loadImage("Imagenes/Xwing.png");
 		disparoImage = loadImage("Imagenes/Disparo.png");
 
-		pantalla = 9;
+		pantalla = 0;
 
 		xwing = new NavePrincipal(638, 690, 87, this, 30, false, xwingImage);
 		disparo = new Disparo(638, 690, 7, 29, 4, this, disparoImage);
@@ -195,20 +195,33 @@ public class Main extends PApplet {
 			if (disparo.getPosY() <= 80) {
 				reiniciarDisparo();
 			}
+			for (int i = 0; i < 10; i++) {
+				for (int j = 0; j < enemigos[i].size(); j++) {
+					if (checkLose(enemigos[i].get(j))) {
+						pantalla = 10;
+					}
+				}
+			}
+
 			textSize(30);
-			text("score: "+ score,50,50);
+			text("score: " + score, 50, 50);
 			break;
 
 		case 10:
 			image(resumen1, 0, 0);
 			if (1049 < mouseX && mouseX < 1255 && 655 < mouseY && mouseY < 718) {
 				image(resumen2, 0, 0);
+
 			}
+			fill(0);
+			textSize(60);
+			text("score: " + score, 500, 364);
+
 			break;
 
 		}
 
-		//text("x:" + mouseX + "y:" + mouseY, mouseX, mouseY);
+		// text("x:" + mouseX + "y:" + mouseY, mouseX, mouseY);
 
 	}
 
@@ -271,7 +284,14 @@ public class Main extends PApplet {
 				pantalla = 9;
 			}
 			break;
+			
+		case 10:
+			
+			if (1049 < mouseX && mouseX < 1255 && 655 < mouseY && mouseY < 718) {
+				exit();
+				
 
+			}
 		}
 
 	}
@@ -343,10 +363,20 @@ public class Main extends PApplet {
 		if (disparo.getPosX() > nave.getPosX() && disparo.getPosX() < (nave.getPosX() + nave.getTam())) {
 			if (disparo.getPosY() < (nave.getPosY() + nave.getTam())) {
 				nave.setVida(nave.getVida() - 1);
-				score ++;
+				score++;
 				choque = true;
 			}
 		}
 		return choque;
+	}
+
+	public boolean checkLose(NaveEnemiga nave) {
+		if (nave.getPosY() + nave.getTam() > xwing.getPosY()) {
+			return true;
+
+		} else {
+			return false;
+		}
+
 	}
 }

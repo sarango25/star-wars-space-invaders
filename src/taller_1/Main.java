@@ -136,7 +136,7 @@ public class Main extends PApplet {
 			break;
 
 		case 9:
-			
+
 			int menor = 0;
 			int passedTime = millis() - saveTime;
 
@@ -164,13 +164,25 @@ public class Main extends PApplet {
 
 			// System.out.println(mayor);
 			for (int i = 0; i < 10; i++) {
-				if (!enemigos[i].isEmpty() && enemigos[i].get(enemigos[i].size() - 1).getPosY() == 210){
+				if (!enemigos[i].isEmpty() && enemigos[i].get(enemigos[i].size() - 1).getPosY() == 210) {
 					menor = 210;
 				}
 			}
 
 			if (menor == 210 && agregarNaves == false) {
 				insertarFila();
+			}
+			for (int i = 0; i < 10; i++) {
+				for (int j = 0; j < enemigos[i].size(); j++) {
+					if (xwing.isDisparando() == true && choque(enemigos[i].get(j))) {
+						if (enemigos[i].get(j).getVida()==0) {
+							enemigos[i].remove(j);
+						}
+						reiniciarDisparo();
+
+					}
+
+				}
 			}
 
 			if (xwing.isDisparando() == true) {
@@ -305,17 +317,30 @@ public class Main extends PApplet {
 
 		for (int i = 0; i < 10; i++) {
 			if (i == R && (enemigos[R].get(enemigos[R].size() - 1) instanceof Fighter || enemigos[R].isEmpty())) {
-				enemigos[i].add(new Interceptor(150 + (120 * i), 112, 70, 14, this, 1, interceptorImage));
+				enemigos[i].add(new Interceptor(150 + (120 * i), 112, 70, 14, this, 2, interceptorImage));
 			}
-			if (enemigos[i].get(enemigos[i].size() - 1) instanceof Fighter) {
+			if (enemigos[i].isEmpty()) {
+				enemigos[i].add(new Interceptor(150 + (120 * i), 112, 70, 14, this, 2, interceptorImage));
+
+			} else if (enemigos[i].get(enemigos[i].size() - 1) instanceof Fighter) {
 				enemigos[i].add(new Fighter(150 + (120 * i), 112, 70, 14, this, 1, fighterImage));
-			}
-			if (enemigos[i].get(enemigos[i].size() - 1) instanceof Interceptor || enemigos[i].isEmpty()) {
-				enemigos[i].add(new Interceptor(150 + (120 * i), 112, 70, 14, this, 1, interceptorImage));
+			} else if (enemigos[i].get(enemigos[i].size() - 1) instanceof Interceptor) {
+				enemigos[i].add(new Interceptor(150 + (120 * i), 112, 70, 14, this, 2, interceptorImage));
 			}
 
 		}
 		agregarNaves = true;
 	}
 
+	public boolean choque(NaveEnemiga nave) {
+		boolean choque = false;
+
+		if (disparo.getPosX() > nave.getPosX() && disparo.getPosX() < (nave.getPosX() + nave.getTam())) {
+			if (disparo.getPosY() < (nave.getPosY() + nave.getTam())) {
+				nave.setVida(nave.getVida()-1);
+				choque = true;
+			}
+		}
+		return choque;
+	}
 }

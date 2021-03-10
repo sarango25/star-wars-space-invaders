@@ -5,12 +5,10 @@ import processing.core.PImage;
 
 public class Interceptor extends NaveEnemiga {
 
-	private int vida;
 	private PImage interceptor;
 
-	public Interceptor(int posX, int posY, int tam,int velY, PApplet app, int vida, PImage interceptor) {
-		super(posX, posY, tam, velY, app);
-		this.vida = vida;
+	public Interceptor(int posX, int posY, int tam, int velY, PApplet app, int vida, PImage interceptor) {
+		super(posX, posY, tam, velY, app, vida);
 		this.interceptor = interceptor;
 
 	}
@@ -21,16 +19,6 @@ public class Interceptor extends NaveEnemiga {
 		getApp().imageMode(PApplet.CENTER);
 		getApp().image(interceptor, getPosX(), getPosY(), getTam(), getTam());
 		getApp().imageMode(PApplet.CORNER);
-	}
-
-	
-
-	public int getVida() {
-		return vida;
-	}
-
-	public void setVida(int vida) {
-		this.vida = vida;
 	}
 
 }

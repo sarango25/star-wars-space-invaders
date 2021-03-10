@@ -22,9 +22,7 @@ public class Fighter extends NaveEnemiga {
 		getApp().image(fighter, getPosX(), getPosY(), getTam(), getTam());
 		getApp().imageMode(PApplet.CORNER);
 	}
-	public void movNave() {
-		
-	}
+	
 
 	public int getVida() {
 		return vida;

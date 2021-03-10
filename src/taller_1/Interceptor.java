@@ -23,9 +23,7 @@ public class Interceptor extends NaveEnemiga {
 		getApp().imageMode(PApplet.CORNER);
 	}
 
-	public void movNave() {
-
-	}
+	
 
 	public int getVida() {
 		return vida;

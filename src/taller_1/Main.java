@@ -16,6 +16,12 @@ public class Main extends PApplet {
 	Fighter fighter;
 	Interceptor interceptor;
 	ArrayList<NaveEnemiga>[] enemigos = new ArrayList[10];
+	boolean agregarNaves;
+
+	int currentTime;
+	int interval;
+	int saveTime;
+	int totalTime;
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -52,17 +58,25 @@ public class Main extends PApplet {
 
 		xwing = new NavePrincipal(638, 690, 87, this, 30, false, xwingImage);
 		disparo = new Disparo(638, 690, 7, 29, 4, this, disparoImage);
-		fighter = new Fighter(200, 200, 69, 3, this, 1, fighterImage);
-		interceptor = new Interceptor(300, 300, 69, 3, this, 2, interceptorImage);
+		// fighter = new Fighter(200, 200, 69, 3, this, 1, fighterImage);
+		// interceptor = new Interceptor(300, 300, 69, 3, this, 2, interceptorImage);
 
 		for (int i = 0; i < 10; i++) {
 			enemigos[i] = new ArrayList<NaveEnemiga>();
 		}
 
 		for (int i = 0; i < 10; i++) {
-			enemigos[i].add(new Fighter(150 + (120 * i), 150, 69, 3, this, 1, fighterImage));
-			enemigos[i].add(new Fighter(150 + (120 * i), 150 + (69 + 50), 69, 3, this, 1, fighterImage));
+			enemigos[i].add(new Fighter(150 + (120 * i), 140 + (70 + 28), 70, 14, this, 1, fighterImage));
+			enemigos[i].add(new Fighter(150 + (120 * i), 140, 70, 14, this, 1, fighterImage));
+
 		}
+
+		agregarNaves = true;
+
+		currentTime = 0;
+		interval = 1000;
+		saveTime = millis();
+		totalTime = 3000;
 
 	}
 
@@ -122,6 +136,10 @@ public class Main extends PApplet {
 			break;
 
 		case 9:
+			
+			int menor = 0;
+			int passedTime = millis() - saveTime;
+
 			image(juego1, 0, 0);
 			xwing.pintar();
 			disparo.pintarDisparo();
@@ -129,10 +147,31 @@ public class Main extends PApplet {
 			for (int i = 0; i < 10; i++) {
 				for (int j = 0; j < enemigos[i].size(); j++) {
 					enemigos[i].get(j).pintar();
+
 				}
 			}
 
-			movEnemigos();
+			if (passedTime > totalTime) {
+				for (int i = 0; i < 10; i++) {
+					for (int j = 0; j < enemigos[i].size(); j++) {
+						enemigos[i].get(j).movNave();
+
+					}
+				}
+				saveTime = millis();
+				agregarNaves = false;
+			}
+
+			// System.out.println(mayor);
+			for (int i = 0; i < 10; i++) {
+				if (!enemigos[i].isEmpty() && enemigos[i].get(enemigos[i].size() - 1).getPosY() == 210){
+					menor = 210;
+				}
+			}
+
+			if (menor == 210 && agregarNaves == false) {
+				insertarFila();
+			}
 
 			if (xwing.isDisparando() == true) {
 				disparo.movDisparo();
@@ -151,6 +190,7 @@ public class Main extends PApplet {
 			break;
 
 		}
+
 		text("x:" + mouseX + "y:" + mouseY, mouseX, mouseY);
 
 	}
@@ -251,6 +291,7 @@ public class Main extends PApplet {
 	}
 
 	public void reiniciarDisparo() {
+
 		if (xwing.isDisparando() == true) {
 			xwing.setDisparando(false);
 			disparo.setPosX(xwing.getPosX());
@@ -258,14 +299,23 @@ public class Main extends PApplet {
 		}
 	}
 
-	public void movEnemigos() {
-		if (millis() % 3000 == 0) {
-			for (int i = 0; i < 10; i++) {
-				for (int j = 0; j < enemigos[i].size(); j++) {
-					enemigos[i].get(j).movNave();
-				}
+	public void insertarFila() {
+
+		int R = (int) random(0, 10);
+
+		for (int i = 0; i < 10; i++) {
+			if (i == R && (enemigos[R].get(enemigos[R].size() - 1) instanceof Fighter || enemigos[R].isEmpty())) {
+				enemigos[i].add(new Interceptor(150 + (120 * i), 112, 70, 14, this, 1, interceptorImage));
 			}
+			if (enemigos[i].get(enemigos[i].size() - 1) instanceof Fighter) {
+				enemigos[i].add(new Fighter(150 + (120 * i), 112, 70, 14, this, 1, fighterImage));
+			}
+			if (enemigos[i].get(enemigos[i].size() - 1) instanceof Interceptor || enemigos[i].isEmpty()) {
+				enemigos[i].add(new Interceptor(150 + (120 * i), 112, 70, 14, this, 1, interceptorImage));
+			}
+
 		}
+		agregarNaves = true;
 	}
 
 }

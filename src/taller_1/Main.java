@@ -23,6 +23,8 @@ public class Main extends PApplet {
 	int saveTime;
 	int totalTime;
 
+	int score;
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		PApplet.main(Main.class.getName());
@@ -77,6 +79,8 @@ public class Main extends PApplet {
 		interval = 1000;
 		saveTime = millis();
 		totalTime = 3000;
+
+		score = 0;
 
 	}
 
@@ -175,7 +179,7 @@ public class Main extends PApplet {
 			for (int i = 0; i < 10; i++) {
 				for (int j = 0; j < enemigos[i].size(); j++) {
 					if (xwing.isDisparando() == true && choque(enemigos[i].get(j))) {
-						if (enemigos[i].get(j).getVida()==0) {
+						if (enemigos[i].get(j).getVida() == 0) {
 							enemigos[i].remove(j);
 						}
 						reiniciarDisparo();
@@ -191,7 +195,8 @@ public class Main extends PApplet {
 			if (disparo.getPosY() <= 80) {
 				reiniciarDisparo();
 			}
-
+			textSize(30);
+			text("score: "+ score,50,50);
 			break;
 
 		case 10:
@@ -203,7 +208,7 @@ public class Main extends PApplet {
 
 		}
 
-		text("x:" + mouseX + "y:" + mouseY, mouseX, mouseY);
+		//text("x:" + mouseX + "y:" + mouseY, mouseX, mouseY);
 
 	}
 
@@ -337,7 +342,8 @@ public class Main extends PApplet {
 
 		if (disparo.getPosX() > nave.getPosX() && disparo.getPosX() < (nave.getPosX() + nave.getTam())) {
 			if (disparo.getPosY() < (nave.getPosY() + nave.getTam())) {
-				nave.setVida(nave.getVida()-1);
+				nave.setVida(nave.getVida() - 1);
+				score ++;
 				choque = true;
 			}
 		}
